@@ -1,0 +1,23 @@
+{
+  "name": "slack-cipher-bot",
+  "version": "0.0.1",
+  "description": "Slackbot which translates a given text with the help of google translate",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bpoetzschke@github.com/bpoetzschke/slack-cipher-bot.git"
+  },
+  "author": "Bjoern Poetzschke <bjoern.poetzschke@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bpoetzschke/slack-cipher-bot/issues"
+  },
+  "homepage": "https://github.com/bpoetzschke/slack-cipher-bot#readme",
+  "dependencies": {
+    "botkit" : "0.2.2"
+  }
+}
