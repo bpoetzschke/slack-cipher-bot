@@ -24,7 +24,7 @@ controller.on('bot_channel_join', function() {
 controller.on('direct_mention', function(bot, message) {
     if (message.type === 'message') {
         bot.reply(message, {
-            text: "Aye! I ciphered the following for you:",
+            text: "Aye <@"+ message.user +">! I ciphered the following for you:",
             attachments: [{
                     text: translate(message.text)
                 }]
