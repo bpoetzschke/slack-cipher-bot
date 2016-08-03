@@ -1,50 +1,47 @@
 "use strict";
 
-var Botkit = require('botkit'),
-    trnsltr = require('./translator'),
+var slashBot = require('./slash_bot'),
     express = require('express'),
-    app = express(),
-    controller = Botkit.slackbot({
-        logLevel: 3
+    bodyParser = require('body-parser'),
+    bot = require('./bot'),
+    app = express();
+
+function startExpress() {
+    app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+        extended: true
+    }));
+
+    app.set('port', (process.env.PORT || 5000));
+
+    //For avoidong Heroku $PORT error
+    app.get('/', function (request, response) {
+        var result = 'App is running'
+        response.send(result);
     });
 
-controller.spawn({
-    token: process.env.SLACK_TOKEN
-}).startRTM(function (err) {
-    if (err) {
-       throw new Error('Could not connect to slack');
-    }
-    console.log('Connected to slack');
-});
+    app.post('/cipher', function (request, response) {
+        slashBot.process(request, response, slashToken);
+    });
 
+    app.listen(app.get('port'), function () {
+        console.log('App is running, server is listening on port ', app.get('port'));
+    });
+}
 
-// Listen to on join channel event and log
-controller.on('bot_channel_join', function() {
-    console.log('Joined channel');
-});
+function startSlackBot() {
+    bot.run();
+}
 
-//Listen to all messages from a channel
-controller.on('direct_mention', function(bot, message) {
-    if (message.type === 'message') {
-        trnsltr.translate(message.text, function(translated) {
-            bot.reply(message, {
-                    text: "Aye <@"+ message.user +">! I ciphered the following for you:",
-                    attachments: [{
-                        text: translated
-                    }]
-                }
-            );
-        });
+var slackToken = process.env.SLACK_TOKEN;
+var translateToken = process.env.TRANSLATE_API_KEY;
+var slashToken = process.env.SLASH_TOKEN;
 
-    }
-});
-
-app.set('port', (process.env.PORT || 5000));
-
-//For avoidong Heroku $PORT error
-app.get('/', function(request, response) {
-    var result = 'App is running'
-    response.send(result);
-}).listen(app.get('port'), function() {
-    console.log('App is running, server is listening on port ', app.get('port'));
-});
+if (slackToken != null && translateToken != null && slashToken != null) {
+    slashBot.slashToken = slashToken;
+    startExpress();
+    startSlackBot();
+} else {
+    console.error("Required env variables not set");
+    console.error("Good bye!");
+    process.exit(1);
+}
