@@ -1,6 +1,7 @@
 "use strict";
 
 var Botkit = require('botkit'),
+    trnsltr = require('./translator'),
     controller = Botkit.slackbot({
         logLevel: 3
     });
@@ -26,13 +27,9 @@ controller.on('direct_mention', function(bot, message) {
         bot.reply(message, {
             text: "Aye <@"+ message.user +">! I ciphered the following for you:",
             attachments: [{
-                    text: translate(message.text)
+                    text: trnsltr.translate(message.text)
                 }]
             }
         );
     }
 });
-
-function translate(text) {
-    return text.toUpperCase();
-}
