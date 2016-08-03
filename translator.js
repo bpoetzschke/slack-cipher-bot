@@ -1,34 +1,28 @@
 "use strict";
 
 var rp = require('request-promise'),
-    cheerio = require('cheerio'),
     languages = ['ar', 'bn', 'cy', 'is', 'en'];
-function translate(message) {
-    doRequest("ar", message);
+function translate(message, callback) {
+    doRequest("ar", message, callback);
 }
 
-function doRequest(language, text) {
+function doRequest(language, text, callback) {
+    var translateApiKey = process.env.TRANSLATE_API_KEY;
     var options = {
-        uri: 'https://translate.google.com/#auto/' + language + '/' + encodeURIComponent(text),
-        resolveWithFullResponse: true,
-        transform: function (body) {
-            console.log("body");
-            console.log(body);
-            return cheerio.load(body);
-        }
+        uri: 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + translateApiKey + '&text=' + encodeURIComponent(text) + '&lang=' + language,
+        headers: {
+            'User-Agent' : 'slack-cipher-bot'
+        },
+        json: true
     };
 
-    console.log("Sending translate request to: " + options.uri);
+    console.log('Sending translate request.');
 
-    rp(options).then(function ($) {
-        var childs = $("#result_box").children();
-        console.log(childs.length);
-        for (var i = 0; i < childs.length; i++) {
-            console.log(childs[i].value());
-        }
-    }).catch(function (err) {
-        console.error('Error while crawling translator page');
-    })
+    rp(options).then(function (data) {
+        var translated = data.text[0];
+
+        callback(translated);
+    });
 }
 
 module.exports = {

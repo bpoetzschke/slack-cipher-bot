@@ -24,12 +24,15 @@ controller.on('bot_channel_join', function() {
 //Listen to all messages from a channel
 controller.on('direct_mention', function(bot, message) {
     if (message.type === 'message') {
-        bot.reply(message, {
-            text: "Aye <@"+ message.user +">! I ciphered the following for you:",
-            attachments: [{
-                    text: trnsltr.translate(message.text)
-                }]
-            }
-        );
+        trnsltr.translate(message.text, function(translated) {
+            bot.reply(message, {
+                    text: "Aye <@"+ message.user +">! I ciphered the following for you:",
+                    attachments: [{
+                        text: translated
+                    }]
+                }
+            );
+        });
+
     }
 });
