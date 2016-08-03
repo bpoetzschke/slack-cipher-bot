@@ -2,7 +2,8 @@
 
 var Botkit = require('botkit'),
     trnsltr = require('./translator'),
-    http = require('http'),
+    express = require('express'),
+    app = express(),
     controller = Botkit.slackbot({
         logLevel: 3
     });
@@ -38,9 +39,12 @@ controller.on('direct_mention', function(bot, message) {
     }
 });
 
-http.createServer(function (request, response) {
-    var content = '<html><body><strong>I\'m the slack cipher bot.</strong></body></html>';
+app.set('port', (process.env.PORT || 5000));
 
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.end(content, 'utf-8');
-}).listen(5000);
+//For avoidong Heroku $PORT error
+app.get('/', function(request, response) {
+    var result = 'App is running'
+    response.send(result);
+}).listen(app.get('port'), function() {
+    console.log('App is running, server is listening on port ', app.get('port'));
+});

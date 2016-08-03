@@ -19,6 +19,7 @@
   "homepage": "https://github.com/bpoetzschke/slack-cipher-bot#readme",
   "dependencies": {
     "botkit" : "0.2.2",
-    "request-promise" : "^4.1.0"
+    "request-promise" : "^4.1.0",
+    "express" : "^4.14.0"
   }
 }
