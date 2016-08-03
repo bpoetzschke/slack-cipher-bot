@@ -5,7 +5,7 @@ var translator = require('./translator'),
 
 function processRequest(request, response, slashToken) {
     if (request.body.token == slashToken) {
-        response.end();
+        response.end("Thank you very much for your request.\nThe translation will be posted shortly");
         var text = request.body.text;
         var responseUrl = request.body.response_url;
 
