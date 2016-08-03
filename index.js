@@ -2,6 +2,7 @@
 
 var Botkit = require('botkit'),
     trnsltr = require('./translator'),
+    http = require('http'),
     controller = Botkit.slackbot({
         logLevel: 3
     });
@@ -36,3 +37,10 @@ controller.on('direct_mention', function(bot, message) {
 
     }
 });
+
+http.createServer(function (request, response) {
+    var content = '<html><body><strong>I\'m the slack cipher bot.</strong></body></html>';
+
+    response.writeHead(200, { 'Content-Type': 'text/html' });
+    response.end(content, 'utf-8');
+}).listen(5000);
