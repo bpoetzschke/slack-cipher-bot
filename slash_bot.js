@@ -2,6 +2,7 @@
 
 var translator = require('./translator'),
     manipulator = require('./manipulator'),
+    utils = require('./utils'),
     rp = require('request-promise');
 
 function processRequest(request, response, slashToken) {
@@ -9,12 +10,16 @@ function processRequest(request, response, slashToken) {
         response.end("Thank you very much for your request.\nThe translation will be posted shortly");
         var text = request.body.text;
         var responseUrl = request.body.response_url;
-                
-        extractParameters(text, function( text, params ) {
+
+        var callback = function(text) {
+            sendResult(responseUrl, text);
+        };
+
+        utils.extractParams(text, function( text, params ) {
             if (params) {
-                manipulator.switchLetters(text, params, sendResult);
+                manipulator.switchLetters(text, params, callback);
             } else {
-                translator.translate(text, sendResult);
+                translator.translate(text, callback);
             }
         });
 
@@ -23,7 +28,7 @@ function processRequest(request, response, slashToken) {
     }
 }
 
-function sendResult( text ) {
+function sendResult(responseUrl, translated) {
     var responseBody = {
         response_type: 'in_channel',
         text: translated
@@ -37,24 +42,6 @@ function sendResult( text ) {
             'Content-Type': 'application/json'
         }
     });
-}
-
-function extractParameters(text, callback) {
-    var findRegex = /%\S+/g,
-        replRegex = /%\S+\s?/g,
-        rawParams = text.match(regexp);
-    
-    if (rawParams.length > 0) {
-        var params = {}
-        for (var i = 0; i < rawParams; i++) {
-            var rawParam = rawParams[i].split('=');
-            params[rawParam[0]] = rawParam[1].split(',').filter(Boolean);
-        } 
-        
-        callback( text.replace(replRegex, ''), params );
-    }
-
-    return callback( text, null );
 }
 
 module.exports = {
