@@ -25,6 +25,7 @@ Option 2:
 ---
 
 ###Translation chain
+
 The bot will translate the given text in the following language order.
 
 1. Yiddish - `yi`
@@ -47,10 +48,26 @@ In order to use the `slack-cipher-bot` you have to obtain a token for slash comm
 Goto `https://{myslack}.slack.com/apps/A0F82E8CA-slash-commands` and create a new slash command.
 Specify the command for the bot and also define the URL where the server for the bot is located.
 
+**Note:** Replace `{myslack}` with team name. 
+
 #### Slack Bot token
 To get a slack bot token you have to create a new bot integration for your team.
 For this please visit `https://{myslack}.slack.com/apps/A0F7YS25R-bots` and select `Add Configuration.`
 
+**Note:** Replace `{myslack}` with team name.
+
 #### Translation API token
 To obtain a translation token you have to create a Yandex account. Afterwards you can obtain a translation api
 key from [https://tech.yandex.com/keys/get/?service=trnsl](https://tech.yandex.com/keys/get/?service=trnsl).
+
+---
+
+###Replace characters
+To use character replacement instead of translation you can add `%s=f %r=k` to your message.
+
+- `%s` - Defining search charcters, can be a comma separated list
+- `%r` - Defining replace charcters, can be a comma separated list
+
+Example:
+
+    /cipher Hello World %s=l,o %r=f,a
