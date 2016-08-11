@@ -8,11 +8,16 @@ function switchLetters(text, params, callback) {
     ) {
         
         var searchLetters = params['s'],
-            replaceLetters = params['r'];
+            replaceLetters = params['r'],
+            re = null;
 
         for( var i=0; i < searchLetters.length; i++ ) {
-            var re = RegExp(searchLetters[i],"g");
-            manipulated = manipulated.replace(re, replaceLetters[i]);
+            // first replace lower case variant
+            re = RegExp(searchLetters[i].toLowerCase(),"g");
+            manipulated = manipulated.replace(re, replaceLetters[i].toLowerCase());
+            // second replace upper case variant
+            re = RegExp(searchLetters[i].toUpperCase(),"g");
+            manipulated = manipulated.replace(re, replaceLetters[i].toUpperCase());
         }
     }
 
