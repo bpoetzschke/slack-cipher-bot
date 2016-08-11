@@ -5,8 +5,24 @@ it back to the original language. Furthermore this bot supports slack slash comm
 to a channel.
 For translation the [Yandex Translation API](https://api.yandex.com/translate/) is being utilized.
 
+---
+
 ### Run slackbot
-To run the slack bot you have two 
+Before running the slack make sure you obtained the required tokens for Yandex Translation API, Slack Slash Command and finally Slack API token.
+If you have gathered the required token you can start the app with the following two options.
+
+Option 1:
+
+    $ export SLACK_TOKEN=...
+    $ export SLASH_TOKEN=...
+    $ export TRANSLATE_API_KEY=...
+    $ npm start
+
+Option 2:
+    
+    $ SLACK_TOKEN=... SLASH_TOKEN=... TRANSLATE_API_KEY=... npm start
+
+---
 
 ###Translation chain
 The bot will translate the given text in the following language order.
@@ -21,8 +37,20 @@ The bot will translate the given text in the following language order.
 
 This list of languages will be also accept from environment variables in a future release.
 
+---
+
 ###Obtain Slack tokens
+
+#### Slash Command token
 In order to use the `slack-cipher-bot` you have to obtain a token for slash commands.
 
-Goto https://{myslack}.slack.com/apps/A0F82E8CA-slash-commands and create a new slash command.
+Goto `https://{myslack}.slack.com/apps/A0F82E8CA-slash-commands` and create a new slash command.
 Specify the command for the bot and also define the URL where the server for the bot is located.
+
+#### Slack Bot token
+To get a slack bot token you have to create a new bot integration for your team.
+For this please visit `https://{myslack}.slack.com/apps/A0F7YS25R-bots` and select `Add Configuration.`
+
+#### Translation API token
+To obtain a translation token you have to create a Yandex account. Afterwards you can obtain a translation api
+key from [https://tech.yandex.com/keys/get/?service=trnsl](https://tech.yandex.com/keys/get/?service=trnsl).
