@@ -38,10 +38,8 @@ function run() {
 
             utils.extractParams(message.text, function( text, params ) {
                 if (params) {
-                    console.log("manipulate", params);
                     manipulator.switchLetters(text, params, callback);
                 } else {
-                    console.log("translate");
                     translator.translate(text, callback);
                 }
             });
