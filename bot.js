@@ -2,6 +2,8 @@
 
 var Botkit = require('botkit'),
     translator = require('./translator'),
+    utils = require('./utils'),
+    manipulator = require('./manipulator'),
     controller = Botkit.slackbot({
         logLevel: 3
     });
@@ -25,18 +27,28 @@ function run() {
     //Listen to all messages from a channel
     controller.on('direct_mention', function (bot, message) {
         if (message.type === 'message') {
-            translator.translate(message.text, function (translated) {
+
+            var callback = function(text) {
                 bot.reply(message, {
                     text: "Aye <@" + message.user + ">! I ciphered the following for you:", attachments: [{
-                        text: translated
+                        text: text
                     }]
                 });
-            });
+            };
 
+            utils.extractParams(message.text, function( text, params ) {
+                if (params) {
+                    console.log("manipulate", params);
+                    manipulator.switchLetters(text, params, callback);
+                } else {
+                    console.log("translate");
+                    translator.translate(text, callback);
+                }
+            });
         }
     });
 }
 
 module.exports = {
     run: run
-}
+};

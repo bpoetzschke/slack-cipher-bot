@@ -7,15 +7,15 @@ function extractParameters(text, callback) {
 
     if (rawParams.length > 0) {
         var params = {};
-        for (var i = 0; i < rawParams; i++) {
+        for (var i = 0; i < rawParams.length; i++) {
             var rawParam = rawParams[i].split('=');
-            params[rawParam[0]] = rawParam[1].split(',').filter(Boolean);
+            params[rawParam[0].substr(1)] = rawParam[1].split(',').filter(Boolean);
         }
 
-        callback(text.replace(replRegex, ''), params);
+        return callback(text.replace(replRegex, ''), params);
     }
 
-    return callback(text);
+    return callback(text, null);
 }
 
 module.exports = {
