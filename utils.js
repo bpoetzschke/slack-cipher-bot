@@ -5,7 +5,7 @@ function extractParameters(text, callback) {
         replRegex = /%\S+\s?/g,
         rawParams = text.match(findRegex);
 
-    if (rawParams.length > 0) {
+    if (Array.isArray(rawParams) && rawParams.length > 0) {
         var params = {};
         for (var i = 0; i < rawParams.length; i++) {
             var rawParam = rawParams[i].split('=');
